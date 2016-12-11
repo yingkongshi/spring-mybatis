@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.springmybatis.demo.dao.IUserDao" >
+  <resultMap id="BaseResultMap" type="com.springmybatis.demo.bean.User" >
+    <id column="user_id" property="id" jdbcType="VARCHAR" />
+    <result column="user_name" property="name" jdbcType="VARCHAR" />
+    <result column="user_password" property="password" jdbcType="VARCHAR" />
+    <result column="user_age" property="age" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_id, user_name, user_password, user_age
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tb_user
+    where user_id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tb_user
+    where user_id = #{id}
+  </delete>
+  <insert id="insert" parameterType="com.springmybatis.demo.bean.User" >
+    insert into tb_user (user_id, user_name, user_password, 
+      user_age)
+    values (#{id}, #{name}, #{password}, #{age})
+  </insert>
+  <insert id="insertSelective" parameterType="com.springmybatis.demo.bean.User" >
+    insert into tb_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        user_id,
+      </if>
+      <if test="name != null" >
+        user_name,
+      </if>
+      <if test="password != null" >
+        user_password,
+      </if>
+      <if test="age != null" >
+        user_age
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.springmybatis.demo.bean.User" >
+    update tb_user
+    <set>
+      <if test="name != null" >
+        user_name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        user_password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        user_age = #{age,jdbcType=INTEGER},
+      </if>
+    </set>
+    where user_id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.springmybatis.demo.bean.User" >
+    update tb_user
+    set user_name = #{name,jdbcType=VARCHAR},
+      user_password = #{password,jdbcType=VARCHAR},
+      user_age = #{age,jdbcType=INTEGER}
+    where user_id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>
